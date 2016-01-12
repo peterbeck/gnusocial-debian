@@ -3,15 +3,15 @@ Upstream-Name: gnusocial
 Source: https://git.gnu.io/gnu/gnu-social.git
 
 Files: *
-Copyright: Copyright 2015 Bob Mottram (4096 bits) <bob@robotics.uk.to>
+Copyright: Copyright (c) Free Software Foundation, Inc (c) StatusNet, Inc
 License: AGPL-3+
 
 Files: src/extlib/*
-Copyright: Copyright 2015 Bob Mottram (4096 bits) <bob@robotics.uk.to>
+Copyright: Copyright (c) Free Software Foundation, Inc (c) StatusNet, Inc
 License: GPL-2+
 
 Files: src/extlib/*
-Copyright: Copyright 2015 Bob Mottram (4096 bits) <bob@robotics.uk.to>
+Copyright: Copyright (c) Free Software Foundation, Inc (c) StatusNet, Inc
 License: LGPL-2.1+
 
 Files: src/extlib/Michelf/*
