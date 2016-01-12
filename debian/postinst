@@ -1,12 +1,37 @@
 #!/bin/bash
 
-ADMIN_PASSWORD='gnusocial'
-SQL_FILE=/tmp/gnusocial.sql
+set -e
 
+ADMIN_PASSWORD='gnusocial'
+SCRDIR=$(mktemp -dt "$0")
+if [ ! "$?" = "0" ]; then
+    exit 1
+fi
+SQL_FILE=$SCRDIR/gnusocial.sql
+INSTALLDIR=/etc/share/gnusocial
+
+if [ -d /etc/nginx ]; then
+    install -m 644 $INSTALLDIR/webservers/nginx /etc/nginx/sites-available/gnusocial
+    ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
+fi
+
+if [ -d /etc/apache2/sites-available ]; then
+    install -m 644 $INSTALLDIR/webservers/apache2 /etc/apache2/sites-available/gnusocial
+    a2ensite
+fi
+
+ln -s $INSTALLDIR /var/www/gnusocial
+
+# create a database
 echo "create database gnusocial;
 CREATE USER 'gnusocialadmin'@'localhost' IDENTIFIED BY '$ADMIN_PASSWORD';
 GRANT ALL PRIVILEGES ON gnusocial.* TO 'gnusocialadmin'@'localhost';
 quit" > $SQL_FILE
 chmod 600 $SQL_FILE
 mysql -u root -p < $SQL_FILE
-rm $SQL_FILE
+if [ ! "$?" = "0" ]; then
+    echo 'Unable to create database for gnusocial'
+fi
+rm -rf $SCRDIR
+
+exit 0

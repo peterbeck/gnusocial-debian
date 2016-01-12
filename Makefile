@@ -12,13 +12,7 @@ source:
 install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/${APP}
 	cp -r src/* ${DESTDIR}${PREFIX}/share/${APP}
-	ln -sf ${DESTDIR}${PREFIX}/share/${APP} ${DESTDIR}/var/www/gnusocial
-	if [ -d "${DESTDIR}/etc/nginx" ]; then \
-		install -m 644 webservers/nginx ${DESTDIR}/etc/nginx/sites-available/gnusocial; \
-	fi
-	if [ -d "${DESTDIR}/etc/apache2/sites-available" ]; then \
-		install -m 644 webservers/apache2 ${DESTDIR}/etc/apache2/sites-available/gnusocial; \
-	fi
+	cp -r webservers ${DESTDIR}${PREFIX}/share/${APP}
 uninstall:
 	rm -rf ${PREFIX}/share/${APP}
 	if [ -d "/etc/nginx" ]; then \
