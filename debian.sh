@@ -6,7 +6,7 @@ VERSION=0.01
 RELEASE=1
 ARCH_TYPE='all'
 DIR=${APP}-${VERSION}
-DH_ALWAYS_EXCLUDE=git:.git
+export DH_ALWAYS_EXCLUDE=.git
 
 # Update version numbers automatically - so you don't have to
 sed -i 's/VERSION='${PREV_VERSION}'/VERSION='${VERSION}'/g' Makefile
@@ -29,15 +29,15 @@ if [ ! "$?" = "0" ]; then
 fi
 
 # Build the package
-dpkg-buildpackage -F
+dpkg-buildpackage -i -F
 if [ ! "$?" = "0" ]; then
     mv ../${DIR} ../${APP}-debian
 	exit 3
 fi
 
 # sign files
-gpg -ba ../${APP}_${VERSION}-1_${ARCH_TYPE}.deb
-gpg -ba ../${APP}_${VERSION}.orig.tar.gz
+#gpg -ba ../${APP}_${VERSION}-1_${ARCH_TYPE}.deb
+#gpg -ba ../${APP}_${VERSION}.orig.tar.gz
 
 # restore the parent directory name
 mv ../${DIR} ../${APP}-debian

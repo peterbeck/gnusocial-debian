@@ -8,7 +8,7 @@ Homepage: https://github.com/bashrc/gnusocial-debian
 Vcs-Git: https://github.com/bashrc/gnusocial-debian
 
 Package: gnusocial
-Architecture: any
+Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends},
          nginx | apache2,
          mariadb-server,

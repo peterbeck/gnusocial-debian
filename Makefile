@@ -15,9 +15,6 @@ install:
 	ln -sf ${DESTDIR}${PREFIX}/share/${APP} ${DESTDIR}/var/www/gnusocial
 	if [ -d "${DESTDIR}/etc/nginx" ]; then \
 		install -m 644 webservers/nginx ${DESTDIR}/etc/nginx/sites-available/gnusocial; \
-		if [ ! -f ${DESTDIR}/etc/nginx/sites-enabled/gnusocial ]; then \
-			ln -s ${DESTDIR}/etc/nginx/sites-available/gnusocial ${DESTDIR}/etc/nginx/sites-enabled/; \
-		fi; \
 	fi
 	if [ -d "${DESTDIR}/etc/apache2/sites-available" ]; then \
 		install -m 644 webservers/apache2 ${DESTDIR}/etc/apache2/sites-available/gnusocial; \
