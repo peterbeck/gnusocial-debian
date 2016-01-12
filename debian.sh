@@ -6,6 +6,7 @@ VERSION=0.01
 RELEASE=1
 ARCH_TYPE='all'
 DIR=${APP}-${VERSION}
+DH_ALWAYS_EXCLUDE=git:.git
 
 # Update version numbers automatically - so you don't have to
 sed -i 's/VERSION='${PREV_VERSION}'/VERSION='${VERSION}'/g' Makefile
