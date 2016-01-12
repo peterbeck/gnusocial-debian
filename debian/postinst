@@ -2,7 +2,7 @@
 
 set -e
 
-ADMIN_PASSWORD='gnusocial'
+CREATE_DATABASE='no'
 SCRDIR=$(mktemp -dt "$0")
 if [ ! "$?" = "0" ]; then
     exit 1
@@ -22,15 +22,22 @@ fi
 
 ln -s $INSTALLDIR /var/www/gnusocial
 
-# create a database
-echo "create database gnusocial;
+if [ $CREATE_GNUSOCIAL_DATABASE ]; then
+    CREATE_DATABASE=$CREATE_GNUSOCIAL_DATABASE
+fi
+
+if [[ $CREATE_DATABASE != "no" ]]; then
+    ADMIN_PASSWORD='gnusocial'
+    # create a database
+    echo "create database gnusocial;
 CREATE USER 'gnusocialadmin'@'localhost' IDENTIFIED BY '$ADMIN_PASSWORD';
 GRANT ALL PRIVILEGES ON gnusocial.* TO 'gnusocialadmin'@'localhost';
 quit" > $SQL_FILE
-chmod 600 $SQL_FILE
-mysql -u root -p < $SQL_FILE
-if [ ! "$?" = "0" ]; then
-    echo 'Unable to create database for gnusocial'
+    chmod 600 $SQL_FILE
+    mysql -u root -p < $SQL_FILE
+    if [ ! "$?" = "0" ]; then
+        echo 'Unable to create database for gnusocial'
+    fi
 fi
 rm -rf $SCRDIR
 
