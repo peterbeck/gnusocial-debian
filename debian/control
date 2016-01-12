@@ -1,0 +1,28 @@
+Source: gnusocial
+Section: web
+Priority: extra
+Maintainer: Bob Mottram (4096 bits) <bob@robotics.uk.to>
+Build-Depends: debhelper (>= 9.0.0)
+Standards-Version: 3.9.4
+Homepage: https://github.com/bashrc/gnusocial-debian
+Vcs-Git: https://github.com/bashrc/gnusocial-debian
+
+Package: gnusocial
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+         nginx | apache2,
+         mariadb-server,
+         php-gettext,
+         php5-curl,
+         php5-gd,
+         php5-mysql,
+         git,
+         curl,
+         php-xml-parser
+Description: GNU social is a free social networking platform
+ It helps people in a community, company or group to exchange short
+ status updates, do polls, announce events, or other social
+ activities (and you can add more!). Users can choose which people
+ to "follow" and receive only their friends' or colleagues' status
+ messages. It provides a similar service to sites like Twitter,
+ Google+ or Facebook, but is much more awesome.
