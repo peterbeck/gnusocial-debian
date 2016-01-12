@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ADMIN_PASSWORD='gnusocial'
+SQL_FILE=/tmp/gnusocial.sql
+
+echo "create database gnusocial;
+CREATE USER 'gnusocialadmin'@'localhost' IDENTIFIED BY '$ADMIN_PASSWORD';
+GRANT ALL PRIVILEGES ON gnusocial.* TO 'gnusocialadmin'@'localhost';
+quit" > $SQL_FILE
+chmod 600 $SQL_FILE
+mysql -u root -p < $SQL_FILE
+rm $SQL_FILE
