@@ -35,6 +35,15 @@ Files: src/plugins/FirePHP/extlib/FirePHP/lib/FirePHPCore/*
 Copyright: Copyright (c) 2006-2009, Christoph Dorn
 License: BSD
 
+Files: src/plugins/Minify/extlib/minify/*
+Copyright: Copyright (c) 2008 Ryan Grove <ryan@wonko.com>,
+           Copyright (c) 2008 Steve Clay <steve@mrclay.org>
+License: BSD
+
+Files: src/extlib/php-gettext/*
+Copyright: Copyright 2003, 2006, 2009 -- Danilo "angry with PHP[1]" Segan
+License: GPL-2+
+
 
 License: MIT
  Permission is hereby granted, free of charge, to any person obtaining a copy
