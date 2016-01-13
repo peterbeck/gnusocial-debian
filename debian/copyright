@@ -20,12 +20,12 @@ Copyright: Copyright (c) 2004-2014 Michel Fortin,
 License: BSD
 
 Files: src/plugins/AutoSandbox/*
-Copyright: Copyright (c) 2010 Stubborn Mule - http://www.stubbornmule.net
-License: MIT
+Copyright: Copyright (c) 2010 Sean Carmody<seancarmody@gmail.com>
+License: AGPL-3+
 
 Files: src/plugins/Recaptcha/*
-Copyright: Copyright (c) 2007 reCAPTCHA -- http://recaptcha.net
-License: MIT
+Copyright: Copyright (c) 2009 Eric Helgeson <erichelgeson@gmail.com>
+License: AGPL-3+
 
 Files: src/theme/neo-quitter/*
 Copyright: Copyright (c) 2014 Hannes Mannerheim <h@nnesmannerhe.im>
