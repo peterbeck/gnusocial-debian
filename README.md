@@ -46,8 +46,14 @@ If you want the system to also be accessible as a .onion service:
 
     sudo apt-get install tor
 
+And if you want your site to be _only_ accessible as an onion service:
+
+    debconf-set-selections <<<'gnusocial/domain gnusocial.onion'
+
 Then to install:
 
     sudo dpkg -i gnusocial_*.deb
 
-By default gnusocial will be installed to /etc/share/gnusocial and linked to /var/www/gnusocial.
+By default gnusocial will be installed to **/etc/share/gnusocial** and linked to **/var/www/gnusocial**.
+
+Web host examples will be created within **/etc/apache2/sites-available** or **/etc/nginx/sites-available**, but they're not enabled. You can use that as a guide to how to integrate gnusocial with your system.
