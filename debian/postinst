@@ -53,4 +53,11 @@ quit" > $SQL_FILE
 fi
 rm -rf $SCRDIR
 
+chmod a+w $INSTALLDIR
+chown www-data:www-data $INSTALLDIR
+chmod a+w $INSTALLDIR/avatar
+chmod a+w $INSTALLDIR/background
+chmod a+w $INSTALLDIR/file
+chmod +x $INSTALLDIR/scripts/maildaemon.php
+
 exit 0
