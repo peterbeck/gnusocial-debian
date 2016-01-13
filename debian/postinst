@@ -2,7 +2,19 @@
 
 set -e
 
-CREATE_DATABASE='yes'
+# Source debconf library.
+. /usr/share/debconf/confmodule
+
+# get the domain name to be used
+GNUSOCIAL_DOMAIN_NAME='gnusocial.example'
+db_input medium gnusocial/domain || true
+db_go
+db_get gnusocial/domain
+GNUSOCIAL_DOMAIN_NAME_STR=$RET
+if [ $GNUSOCIAL_DOMAIN_NAME_STR ]; then
+    GNUSOCIAL_DOMAIN_NAME=$GNUSOCIAL_DOMAIN_NAME_STR
+fi
+
 SCRDIR=$(mktemp -dt "$0")
 if [ ! "$?" = "0" ]; then
     exit 1
@@ -10,53 +22,70 @@ fi
 SQL_FILE=$SCRDIR/gnusocial.sql
 INSTALLDIR=/etc/share/gnusocial
 
+# configure nginx
 if [ -d /etc/nginx ]; then
     install -m 644 $INSTALLDIR/webservers/nginx /etc/nginx/sites-available/gnusocial
+    if [[ $GNUSOCIAL_DOMAIN_NAME != 'gnusocial.example' ]]; then
+        sed -i "s|gnusocial.example|${GNUSOCIAL_DOMAIN_NAME}|g" /etc/nginx/sites-available/gnusocial
+    fi
     # Don't enable the site by default because the host files may need to be edited
     #ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
 fi
 
+# configure apache
 if [ -d /etc/apache2/sites-available ]; then
     install -m 644 $INSTALLDIR/webservers/apache2 /etc/apache2/sites-available/gnusocial
+    if [[ $GNUSOCIAL_DOMAIN_NAME != 'gnusocial.example' ]]; then
+        sed -i "s|gnusocial.example|${GNUSOCIAL_DOMAIN_NAME}|g" /etc/apache2/sites-available/gnusocial
+    fi
     # Don't enable the site by default because the host files may need to be edited
     #a2ensite gnusocial
 fi
 
+# link into /var/www
 if [ ! -L /var/www/gnusocial ]; then
     ln -s $INSTALLDIR /var/www/gnusocial
 fi
 
-if [ $CREATE_GNUSOCIAL_DATABASE ]; then
-    CREATE_DATABASE=$CREATE_GNUSOCIAL_DATABASE
+# get password for admin of the gnusocial database
+ADMIN_PASS='gnusocial'
+db_input medium gnusocial/admin_password || true
+db_go
+db_get gnusocial/admin_password
+GNUSOCIAL_ADMIN_PASSWORD=$RET
+if [ $GNUSOCIAL_ADMIN_PASSWORD ]; then
+    ADMIN_PASS=$GNUSOCIAL_ADMIN_PASSWORD
 fi
 
-if [[ $CREATE_DATABASE != "no" ]]; then
-    ADMIN_PASS='gnusocial'
-    if [ $GNUSOCIAL_ADMIN_PASSWORD ]; then
-        ADMIN_PASS=$GNUSOCIAL_ADMIN_PASSWORD
-    fi
-    MYSQL_ROOT_PASS=
-    if [ $MYSQL_ROOT_PASSWORD ]; then
-        MYSQL_ROOT_PASS=$MYSQL_ROOT_PASSWORD
-    fi
-    if [ $MYSQL_ROOT_PASS ]; then
-        RESULT=$(mysqlshow --user=root --password="$MYSQL_ROOT_PASS" gnusocial| grep -v Wildcard | grep -o gnusocial)
-        if [ "$RESULT" != "gnusocial" ]; then
-            # create a database
-            echo "create database gnusocial;
+# get root password for mysql/MariaDB
+MYSQL_ROOT_PASS=
+db_input medium gnusocial/mysql_password || true
+db_go
+db_get gnusocial/mysql_password
+MYSQL_ROOT_PASSWORD=$RET
+if [ $MYSQL_ROOT_PASSWORD ]; then
+    MYSQL_ROOT_PASS=$MYSQL_ROOT_PASSWORD
+fi
+
+# create the database
+if [ $MYSQL_ROOT_PASS ]; then
+    RESULT=$(mysqlshow --user=root --password="$MYSQL_ROOT_PASS" gnusocial| grep -v Wildcard | grep -o gnusocial)
+    if [ "$RESULT" != "gnusocial" ]; then
+        # create a database
+        echo "create database gnusocial;
 CREATE USER 'gnusocialadmin'@'localhost' IDENTIFIED BY '$ADMIN_PASS';
 GRANT ALL PRIVILEGES ON gnusocial.* TO 'gnusocialadmin'@'localhost';
 quit" > $SQL_FILE
-            chmod 600 $SQL_FILE
-            mysql -u root --password="$MYSQL_ROOT_PASS" < $SQL_FILE
-            if [ ! "$?" = "0" ]; then
-                echo 'Unable to create database for gnusocial'
-            fi
+        chmod 600 $SQL_FILE
+        mysql -u root --password="$MYSQL_ROOT_PASS" < $SQL_FILE
+        if [ ! "$?" = "0" ]; then
+            echo 'Unable to create database for gnusocial'
         fi
     fi
 fi
 rm -rf $SCRDIR
 
+# set permissions
 chmod a+w $INSTALLDIR
 chown www-data:www-data $INSTALLDIR
 chmod a+w $INSTALLDIR/avatar

@@ -1,10 +1,8 @@
 <VirtualHost gnusocial.example:80>
-    # replace this with your domain name
     Redirect permanent / https://gnusocial.example/
 </VirtualHost>
 
 <VirtualHost gnusocial.example:443>
-    # replace this with your domain name
     ServerName gnusocial.example
 
     DocumentRoot /var/www/gnusocial

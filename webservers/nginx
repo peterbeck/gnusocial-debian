@@ -1,7 +1,6 @@
 server {
     listen 80;
 
-    # replace this with your domain name
     server_name gnusocial.example;
 
     root /var/www/gnusocial;
@@ -17,7 +16,6 @@ server {
 server {
     listen 443 ssl;
 
-    # replace this with your domain name
     server_name gnusocial.example;
 
     root /var/www/gnusocial;

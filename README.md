@@ -11,7 +11,7 @@ Updating
 
 If you need to update the package to a new version.
 
-    got clone https://github.com/bashrc/gnusocial-debian
+    git clone https://github.com/bashrc/gnusocial-debian
     git clone https://git.gnu.io/gnu/gnu-social.git
 	cd gnu-social
     git checkout <hash/tag> -b <hash/tag>
@@ -25,15 +25,22 @@ Creating the package
 
 Run the debian.sh script to generate the package.
 
+    sudo apt-get install build-essential lintian
     cd gnusocial-debian
     ./debian.sh
+
+The package can be tested with:
+
+    lintian ../gnusocial_*.deb
 
 Installation
 ------------
 
 To ensure that the database gets created set the following before installing the package:
 
-    export GNUSOCIAL_ADMIN_PASSWORD=<admin password for gnusocial database>
-    export MYSQL_ROOT_PASSWORD=<root password for MariaDB/MySql>
+    debconf-set-selections <<<'gnusocial/domain <domain name>'
+    debconf-set-selections <<<'gnusocial/admin_password string <my admin password>'
+    debconf-set-selections <<<'gnusocial/mysql_password string <mysql database password>'
+    sudo dpkg -i gnusocial_*.deb
 
 By default gnusocial will be installed to /etc/share/gnusocial and linked to /var/www/gnusocial
