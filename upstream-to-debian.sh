@@ -20,17 +20,17 @@ cd gnu-social
 git stash
 git checkout $GNUSOCIAL_COMMIT -b $GNUSOCIAL_COMMIT
 
-cp src/etc/share/gnusocial/COPYING COPYING
-rm src/etc/share/gnusocial/COPYING
-rm src/extra-license-file etc/share/gnusocial/extlib/Michelf/License.md
-rm src/extra-license-file etc/share/gnusocial/extlib/gpl-2.0.txt
-rm src/extra-license-file etc/share/gnusocial/extlib/lgpl-2.1.txt
-rm src/extra-license-file etc/share/gnusocial/extlib/php-gettext/COPYING
-rm src/extra-license-file etc/share/gnusocial/plugins/AutoSandbox/LICENSE
-rm src/extra-license-file etc/share/gnusocial/plugins/FirePHP/extlib/FirePHP/lib/FirePHPCore/LICENSE
-rm src/extra-license-file etc/share/gnusocial/plugins/Minify/extlib/minify/LICENSE.txt
-rm src/extra-license-file etc/share/gnusocial/plugins/Recaptcha/LICENSE
-rm src/extra-license-file etc/share/gnusocial/theme/neo-quitter/LICENSE
+cp src/COPYING COPYING
+rm src/COPYING
+rm src/extlib/Michelf/License.md
+rm src/extlib/gpl-2.0.txt
+rm src/extlib/lgpl-2.1.txt
+rm src/extlib/php-gettext/COPYING
+rm src/plugins/AutoSandbox/LICENSE
+rm src/plugins/FirePHP/extlib/FirePHP/lib/FirePHPCore/LICENSE
+rm src/plugins/Minify/extlib/minify/LICENSE.txt
+rm src/plugins/Recaptcha/LICENSE
+rm src/theme/neo-quitter/LICENSE
 rm src/theme/neo-quitter/fonts/FontAwesome.otf
 rm src/theme/neo-quitter/fonts/fontawesome-webfont.ttf
 git add src
