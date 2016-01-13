@@ -1,0 +1,44 @@
+
+server {
+    listen 127.0.0.1:GNUSOCIAL_PORT default_server
+
+    server_name gnusocial.example;
+
+    root /var/www/gnusocial;
+    index index.php index.html index.htm;
+    access_log off;
+
+    limit_conn conn_limit_per_ip 10;
+    limit_req zone=req_limit_per_ip burst=10 nodelay;
+
+    location ~* \.php$ {
+        # Zero-day exploit defense.
+        # http://forum.nginx.org/read.php?2,88845,page=3
+        try_files $uri $uri/ /index.php;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        include fastcgi_params;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_read_timeout 300;
+    }
+
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+
+  location / {
+    rewrite ^(.*)$ /index.php?p=$1 last;
+    break;
+  }
+
+  location ~* ^/(.*)\.(ico|css|js|gif|png|jpg|bmp|JPG|jpeg)$ {
+    root /var/www/gnusocial;
+    rewrite ^/(.*)$ /$1 break;
+    access_log off;
+    expires max;
+  }
+
+  client_max_body_size      15m;
+
+  error_log off;
+}

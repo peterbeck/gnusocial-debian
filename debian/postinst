@@ -5,50 +5,100 @@ set -e
 # Source debconf library.
 . /usr/share/debconf/confmodule
 
-# get the domain name to be used
 GNUSOCIAL_DOMAIN_NAME='gnusocial.example'
+ONION_HOSTNAME=/var/lib/tor/hidden_service_gnusocial/hostname
+ADMIN_PASS='gnusocial'
+GNUSOCIAL_PORT=8087
+
+# get the onion hostname if it exists
+GNUSOCIAL_ONION_DOMAIN_NAME=
+if [ -f $ONION_HOSTNAME ]; then
+    GNUSOCIAL_ONION_DOMAIN_NAME=$(cat $ONION_HOSTNAME)
+
+    # check the port number
+    if ! grep -q "127.0.0.1:$GNUSOCIAL_PORT" /etc/tor/torrc; then
+        echo "gnusocial port in /etc/tor/torrc should be set to $GNUSOCIAL_PORT"
+        exit 1
+    fi
+fi
+
+# get the domain name to be used
 db_input medium gnusocial/domain || true
 db_go
 db_get gnusocial/domain
 GNUSOCIAL_DOMAIN_NAME_STR=$RET
 if [ $GNUSOCIAL_DOMAIN_NAME_STR ]; then
     GNUSOCIAL_DOMAIN_NAME=$GNUSOCIAL_DOMAIN_NAME_STR
+else
+    # if an onion service has been set up for gnusocial
+    if [ -f $ONION_HOSTNAME ]; then
+        GNUSOCIAL_DOMAIN_NAME=$GNUSOCIAL_ONION_DOMAIN_NAME
+    fi
 fi
 
 SCRDIR=$(mktemp -dt "$0")
 if [ ! "$?" = "0" ]; then
-    exit 1
+    exit 2
 fi
 SQL_FILE=$SCRDIR/gnusocial.sql
 INSTALLDIR=/etc/share/gnusocial
-
-# configure nginx
-if [ -d /etc/nginx ]; then
-    install -m 644 $INSTALLDIR/webservers/nginx /etc/nginx/sites-available/gnusocial
-    if [[ $GNUSOCIAL_DOMAIN_NAME != 'gnusocial.example' ]]; then
-        sed -i "s|gnusocial.example|${GNUSOCIAL_DOMAIN_NAME}|g" /etc/nginx/sites-available/gnusocial
-    fi
-    # Don't enable the site by default because the host files may need to be edited
-    #ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
-fi
-
-# configure apache
-if [ -d /etc/apache2/sites-available ]; then
-    install -m 644 $INSTALLDIR/webservers/apache2 /etc/apache2/sites-available/gnusocial
-    if [[ $GNUSOCIAL_DOMAIN_NAME != 'gnusocial.example' ]]; then
-        sed -i "s|gnusocial.example|${GNUSOCIAL_DOMAIN_NAME}|g" /etc/apache2/sites-available/gnusocial
-    fi
-    # Don't enable the site by default because the host files may need to be edited
-    #a2ensite gnusocial
-fi
 
 # link into /var/www
 if [ ! -L /var/www/gnusocial ]; then
     ln -s $INSTALLDIR /var/www/gnusocial
 fi
 
+# configure nginx
+if [[ $GNUSOCIAL_DOMAIN_NAME != 'gnusocial.example' ]]; then
+    if [ -d /etc/nginx ]; then
+        if [[ $GNUSOCIAL_DOMAIN_NAME != *".onion" ]]; then
+            install -m 644 $INSTALLDIR/webservers/nginx /etc/nginx/sites-available/gnusocial
+            if [ $GNUSOCIAL_ONION_DOMAIN_NAME ]; then
+                cat $INSTALLDIR/webservers/nginx $INSTALLDIR/webservers/nginx_onion > /etc/nginx/sites-available/gnusocial
+                sed -i "s|GNUSOCIAL_PORT|${GNUSOCIAL_PORT}|g" /etc/nginx/sites-available/gnusocial
+            fi
+            sed -i "s|gnusocial.example|${GNUSOCIAL_DOMAIN_NAME}|g" /etc/nginx/sites-available/gnusocial
+            # Don't enable the site by default because the host files may need to be edited
+            #if [ ! -L /etc/nginx/sites-enabled/gnusocial ]; then
+            #   ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
+            #fi
+        else
+            # install as an onion service only
+            install -m 644 $INSTALLDIR/webservers/nginx_onion /etc/nginx/sites-available/gnusocial
+            sed -i "s|gnusocial.example|${GNUSOCIAL_ONION_DOMAIN_NAME}|g" /etc/nginx/sites-available/gnusocial
+            sed -i "s|GNUSOCIAL_PORT|${GNUSOCIAL_PORT}|g" /etc/nginx/sites-available/gnusocial
+            if [ ! -L /etc/nginx/sites-enabled/gnusocial ]; then
+                ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
+            fi
+        fi
+    fi
+
+    # configure apache
+    if [ -d /etc/apache2/sites-available ]; then
+        if [[ $GNUSOCIAL_DOMAIN_NAME != *".onion" ]]; then
+            install -m 644 $INSTALLDIR/webservers/apache2 /etc/apache2/sites-available/gnusocial
+            if [ $GNUSOCIAL_ONION_DOMAIN_NAME ]; then
+                cat $INSTALLDIR/webservers/apache2 $INSTALLDIR/webservers/apache2_onion > /etc/apache2/sites-available/gnusocial
+                sed -i "s|GNUSOCIAL_PORT|${GNUSOCIAL_PORT}|g" /etc/apache2/sites-available/gnusocial
+            fi
+            sed -i "s|gnusocial.example|${GNUSOCIAL_DOMAIN_NAME}|g" /etc/apache2/sites-available/gnusocial
+            # Don't enable the site by default because the host files may need to be edited
+            #if [ ! -L /etc/nginx/sites-enabled/gnusocial ]; then
+            #    a2ensite gnusocial
+            #fi
+        else
+            # install as an onion service only
+            install -m 644 $INSTALLDIR/webservers/apache2-onion /etc/apache2/sites-available/gnusocial
+            sed -i "s|gnusocial.example|${GNUSOCIAL_ONION_DOMAIN_NAME}|g" /etc/apache2/sites-available/gnusocial
+            sed -i "s|GNUSOCIAL_PORT|${GNUSOCIAL_PORT}|g" /etc/apache2/sites-available/gnusocial
+            if [ ! -L /etc/apache2/sites-enabled/gnusocial ]; then
+                a2ensite gnusocial
+            fi
+        fi
+    fi
+fi
+
 # get password for admin of the gnusocial database
-ADMIN_PASS='gnusocial'
 db_input medium gnusocial/admin_password || true
 db_go
 db_get gnusocial/admin_password
