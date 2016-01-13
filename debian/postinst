@@ -12,12 +12,14 @@ INSTALLDIR=/etc/share/gnusocial
 
 if [ -d /etc/nginx ]; then
     install -m 644 $INSTALLDIR/webservers/nginx /etc/nginx/sites-available/gnusocial
-    ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
+    # Don't enable the site by default because the host files may need to be edited
+    #ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
 fi
 
 if [ -d /etc/apache2/sites-available ]; then
     install -m 644 $INSTALLDIR/webservers/apache2 /etc/apache2/sites-available/gnusocial
-    a2ensite
+    # Don't enable the site by default because the host files may need to be edited
+    #a2ensite gnusocial
 fi
 
 if [ ! -L /var/www/gnusocial ]; then
