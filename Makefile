@@ -21,11 +21,11 @@ uninstall:
 	if [ -f /etc/nginx/sites-available/gnusocial ]; then \
 		rm /etc/nginx/sites-available/gnusocial; \
 	fi
-	if [ -d "/etc/apache2" ]; then \
+	if [ -d /etc/apache2 ]; then \
 		a2dissite gnusocial; \
 		rm /etc/apache2/sites-available/gnusocial; \
 	fi
-	if [ -d "/var/www/gnusocial" ]; then \
+	if [ -d /var/www/gnusocial ]; then \
 		rm /var/www/gnusocial; \
 	fi
 clean:
