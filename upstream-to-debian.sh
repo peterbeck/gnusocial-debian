@@ -43,6 +43,15 @@ rm src/theme/neo-quitter/css/genericons/example.html
 rm src/theme/neo-quitter/fonts/FontAwesome.otf
 rm src/theme/neo-quitter/fonts/fontawesome-webfont.ttf
 
+# some things replaced by debian packages
+rm -rf src/extlib/php-gettext
+rm -f src/extlib/Auth/OpenID.php
+rm -f src/extlib/Auth/Yadis/Yadis.php
+rm -f src/extlib/Michelf/Markdown.php
+rm -f src/js/extlib/jquery.cookie.js
+rm -f src/js/extlib/jquery.form.js
+rm -f src/js/extlib/jquery.js
+
 # update git
 git add src
 
