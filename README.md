@@ -42,15 +42,12 @@ To ensure that the database gets created set the following before installing the
     debconf-set-selections <<<'gnusocial/admin_password string <my admin password>'
     debconf-set-selections <<<'gnusocial/mysql_password string <mysql database password>'
 
-If you want the system to be accessible as a .onion service:
+If you want the system to also be accessible as a .onion service:
 
     sudo apt-get install tor
-    echo 'HiddenServiceDir /var/lib/tor/hidden_service_gnusocial' >> /etc/tor/torrc
-    echo 'HiddenServicePort 80 127.0.0.1:8087' >> /etc/tor/torrc
-	systemctl restart tor
 
 Then to install:
 
     sudo dpkg -i gnusocial_*.deb
 
-By default gnusocial will be installed to /etc/share/gnusocial and linked to /var/www/gnusocial
+By default gnusocial will be installed to /etc/share/gnusocial and linked to /var/www/gnusocial.
