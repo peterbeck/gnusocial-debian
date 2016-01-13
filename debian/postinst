@@ -24,7 +24,7 @@ if [ -d /etc/tor ]; then
     if [ ! -d /var/lib/tor/hidden_service_gnusocial ]; then
         echo 'HiddenServiceDir /var/lib/tor/hidden_service_gnusocial' >> /etc/tor/torrc
         echo "HiddenServicePort 80 127.0.0.1:$GNUSOCIAL_PORT" >> /etc/tor/torrc
-        systemctl restart Tor
+        service tor restart
         sleep 5
     fi
 fi
