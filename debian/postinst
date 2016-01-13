@@ -20,7 +20,9 @@ if [ -d /etc/apache2/sites-available ]; then
     a2ensite
 fi
 
-ln -s $INSTALLDIR /var/www/gnusocial
+if [ ! -L /var/www/gnusocial ]; then
+    ln -s $INSTALLDIR /var/www/gnusocial
+fi
 
 if [ $CREATE_GNUSOCIAL_DATABASE ]; then
     CREATE_DATABASE=$CREATE_GNUSOCIAL_DATABASE
