@@ -21,6 +21,7 @@ Creating the package
 Run the debian.sh script to generate the package.
 
     sudo apt-get install build-essential lintian debconf
+    git clone https://github.com/bashrc/gnusocial-debian
     cd gnusocial-debian
     ./debian.sh
 
