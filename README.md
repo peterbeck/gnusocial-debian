@@ -4,14 +4,10 @@ GNU Social package for Debian
 Updating
 --------
 
-If you need to update the package to a new version.
+If you need to update the package to a new version:
 
-    git clone https://github.com/bashrc/gnusocial-debian
-    git clone https://git.gnu.io/gnu/gnu-social.git
-	cd gnu-social
-    git checkout <hash/tag> -b <hash/tag>
-    cp ..
-	cp -r gnu-social/* gnusocial-debian/src/
+    sed -i 's|GNUSOCIAL_COMMIT.*|GNUSOCIAL_COMMIT=<commit>|g' upstream-to-debian.sh
+    make sync
 
 Edit version numbers within Makefile, debian.sh and debian/changelog
 

@@ -6,6 +6,8 @@ PREFIX?=/etc
 
 all:
 debug:
+sync:
+	./upstream-to-debian.sh
 source:
 	tar -cvf ../${APP}_${VERSION}.orig.tar ../${APP}-${VERSION} --exclude-vcs
 	gzip -f9n ../${APP}_${VERSION}.orig.tar
