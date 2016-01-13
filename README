@@ -1,11 +1,6 @@
 GNU Social package for Debian
 =============================
 
-Licenses
---------
-
-Is there a license incompatibility between GPL2 and Apache2 within extlib?
-
 Updating
 --------
 
