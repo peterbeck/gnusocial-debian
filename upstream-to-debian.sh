@@ -23,6 +23,7 @@ cd ..
 
 cp -r gnu-social/* src/
 
+# remove additional copyright files
 cp src/COPYING COPYING
 rm src/COPYING
 rm src/extlib/Michelf/License.md
@@ -34,8 +35,15 @@ rm src/plugins/FirePHP/extlib/FirePHP/lib/FirePHPCore/LICENSE
 rm src/plugins/Minify/extlib/minify/LICENSE.txt
 rm src/plugins/Recaptcha/LICENSE
 rm src/theme/neo-quitter/LICENSE
+
+# some insecure example
+rm src/theme/neo-quitter/css/genericons/example.html
+
+# fonts not needed
 rm src/theme/neo-quitter/fonts/FontAwesome.otf
 rm src/theme/neo-quitter/fonts/fontawesome-webfont.ttf
+
+# update git
 git add src
 
 echo "Synced with upstream to commit $GNUSOCIAL_COMMIT"
