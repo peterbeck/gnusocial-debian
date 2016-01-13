@@ -1,5 +1,5 @@
 APP=gnusocial
-VERSION=0.01
+VERSION=1.2.x
 RELEASE=1
 ARCH_TYPE='all'
 PREFIX?=/etc
@@ -16,11 +16,15 @@ install:
 uninstall:
 	rm -rf ${PREFIX}/share/${APP}
 	if [ -d "/etc/nginx" ]; then \
-		rm /etc/nginx/sites-enabled/gnusocial; \
+		rm -f /etc/nginx/sites-enabled/gnusocial; \
 		rm /etc/nginx/sites-available/gnusocial; \
 	fi
 	if [ -d "/etc/apache2" ]; then \
+		a2dissite; \
 		rm /etc/apache2/sites-available/gnusocial; \
+	fi
+	if [ -d "/var/www/gnusocial" ]; then \
+		rm -rf /var/www/gnusocial; \
 	fi
 clean:
 	rm -f \#* \.#* debian/*.substvars debian/*.log
