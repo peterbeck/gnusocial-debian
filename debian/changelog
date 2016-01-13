@@ -1,5 +1,5 @@
-gnusocial (0.01-1) unstable; urgency=low
+gnusocial (1.2.0-beta3) unstable; urgency=low
 
   * Initial release
 
- -- Bob Mottram <bob.mottram@codethink.co.uk>  Tue, 12 Jan 2016 14:00:00 +0100
+ -- Bob Mottram <bob.mottram@codethink.co.uk>  Wed, 13 Jan 2016 09:52:00 +0100

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 APP=gnusocial
-PREV_VERSION=0.01
-VERSION=1.2.x
-RELEASE=1
+PREV_VERSION=1.2.0
+VERSION=1.2.0
+RELEASE=beta3
 ARCH_TYPE='all'
 DIR=${APP}-${VERSION}
 export DH_ALWAYS_EXCLUDE=.git
