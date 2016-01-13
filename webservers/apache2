@@ -1,0 +1,26 @@
+<VirtualHost gnusocial.example:80>
+    # replace this with your domain name
+    Redirect permanent / https://gnusocial.example/
+</VirtualHost>
+
+<VirtualHost gnusocial.example:443>
+    # replace this with your domain name
+    ServerName gnusocial.example
+
+    DocumentRoot /var/www/gnusocial
+    DirectoryIndex index.php
+    <Directory /var/www/gnusocial>
+        AllowOverride All
+        Order Deny,Allow
+        Allow from all
+    </Directory>
+
+    SSLCertificateFile /etc/letsencrypt/live/$ServerName/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/$ServerName/privkey.pem
+    SSLProtocol All -SSLv2 -SSLv3
+    SSLHonorCipherOrder On
+    SSLCompression off
+    SSLCipherSuite 'EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!ECDSA:CAMELLIA256-SHA:AES256-SHA:CAMELLIA128-SHA:AES128-SHA'
+
+    Header always set Strict-Transport-Security "max-age=15768000"
+</VirtualHost>
