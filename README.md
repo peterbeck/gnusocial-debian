@@ -6,6 +6,28 @@ Licenses
 
 Is there a license incompatibility between GPL2 and Apache2 within extlib?
 
+Updating
+--------
+
+If you need to update the package to a new version.
+
+    got clone https://github.com/bashrc/gnusocial-debian
+    git clone https://git.gnu.io/gnu/gnu-social.git
+	cd gnu-social
+    git checkout <hash/tag> -b <hash/tag>
+    cp ..
+	cp -r gnu-social/* gnusocial-debian/src/
+
+Edit version numbers within Makefile, debian.sh and debian/changelog
+
+Creating the package
+--------------------
+
+Run the debian.sh script to generate the package.
+
+    cd gnusocial-debian
+    ./debian.sh
+
 Installation
 ------------
 
