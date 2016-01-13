@@ -19,6 +19,9 @@ fi
 cd gnu-social
 git stash
 git checkout $GNUSOCIAL_COMMIT -b $GNUSOCIAL_COMMIT
+cd ..
+
+cp -r gnu-social/* src/
 
 cp src/COPYING COPYING
 rm src/COPYING
