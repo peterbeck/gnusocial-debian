@@ -15,16 +15,18 @@ install:
 	cp -r webservers ${DESTDIR}${PREFIX}/share/${APP}
 uninstall:
 	rm -rf ${PREFIX}/share/${APP}
-	if [ -d "/etc/nginx" ]; then \
+	if [ -L /etc/nginx/sites-enabled/gnusocial ]; then \
 		rm -f /etc/nginx/sites-enabled/gnusocial; \
+	fi
+	if [ -f /etc/nginx/sites-available/gnusocial ]; then \
 		rm /etc/nginx/sites-available/gnusocial; \
 	fi
 	if [ -d "/etc/apache2" ]; then \
-		a2dissite; \
+		a2dissite gnusocial; \
 		rm /etc/apache2/sites-available/gnusocial; \
 	fi
 	if [ -d "/var/www/gnusocial" ]; then \
-		rm -rf /var/www/gnusocial; \
+		rm /var/www/gnusocial; \
 	fi
 clean:
 	rm -f \#* \.#* debian/*.substvars debian/*.log
