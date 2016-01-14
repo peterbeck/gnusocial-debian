@@ -9,7 +9,7 @@ debug:
 sync:
 	./upstream-to-debian.sh
 source:
-	tar -cvf ../${APP}_${VERSION}.orig.tar ../${APP}-${VERSION} --exclude-vcs
+	tar -cvf ../${APP}_${VERSION}.orig.tar ../${APP}-${VERSION} --exclude-vcs --exclude=gnu-social
 	gzip -f9n ../${APP}_${VERSION}.orig.tar
 install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/${APP}

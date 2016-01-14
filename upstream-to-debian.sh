@@ -1,28 +1,30 @@
 #!/bin/bash
 
 SOURCE_FILE='README.md'
-GNUSOCIAL_COMMIT=$(cat $SOURCE_FILE | grep 'Upstream commit:' | head -n 1 | awk -F ':' '{print $2}' | sed -e 's/^[ \t]*//')
+GNUSOCIAL_COMMIT='67801a556610f89a60106c0074c42947967f3adf'
+UPSTREAM_DIR=~/.gnu-social
+CURR_DIR=$(pwd)
 
 if [ $1 ]; then
-    GNUSOCIAL_COMMIT=$1
+    GNUSOCIAL_COMMIT='67801a556610f89a60106c0074c42947967f3adf'
 fi
 
 if [ ! -d gnu-social ]; then
-    git clone https://git.gnu.io/gnu/gnu-social.git
+    git clone https://git.gnu.io/gnu/gnu-social.git $UPSTREAM_DIR
 else
-    cd gnu-social
+    cd $UPSTREAM_DIR
     git stash
     git checkout master
     git pull
-    cd ..
+    cd $CURR_DIR
 fi
 
-cd gnu-social
+cd $UPSTREAM_DIR
 git stash
 git checkout $GNUSOCIAL_COMMIT -b $GNUSOCIAL_COMMIT
-cd ..
+cd $CURR_DIR
 
-cp -r gnu-social/* src/
+cp -r $UPSTREAM_DIR/* src/
 
 # remove additional copyright files
 cp src/COPYING COPYING
