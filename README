@@ -1,19 +1,23 @@
 GNU Social package for Debian
 =============================
 
+Current build
+-------------
+
+Version: 1.2.0
+
+Release: beta3
+
+Upstream commit: 67801a556610f89a60106c0074c42947967f3adf
+
 Updating
 --------
 
-If you need to update the package to a new version.
+If you need to update the package to a new version then edit the above version/commit then run:
 
-    git clone https://github.com/bashrc/gnusocial-debian
-    git clone https://git.gnu.io/gnu/gnu-social.git
-	cd gnu-social
-    git checkout <hash/tag> -b <hash/tag>
-    cp ..
-	cp -r gnu-social/* gnusocial-debian/src/
+    make sync
 
-Edit version numbers within Makefile, debian.sh and debian/changelog
+Also edit debian/changelog with the latest version at the top. The email address within the changelog must exactly correspond to your gpg key.
 
 Creating the package
 --------------------
