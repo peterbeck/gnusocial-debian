@@ -1,6 +1,6 @@
 APP=gnusocial
-VERSION=1.2.0
-RELEASE=beta3
+VERSION='1.2.0'
+RELEASE='beta3'
 ARCH_TYPE='all'
 PREFIX?=/etc
 

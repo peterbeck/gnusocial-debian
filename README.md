@@ -1,15 +1,21 @@
 GNU Social package for Debian
 =============================
 
+Current build
+-------------
+
+Version: 1.2.0
+Release: beta3
+Upstream commit: 67801a556610f89a60106c0074c42947967f3adf
+
 Updating
 --------
 
-If you need to update the package to a new version:
+If you need to update the package to a new version then edit the above version/commit then run:
 
-    sed -i 's|GNUSOCIAL_COMMIT.*|GNUSOCIAL_COMMIT=<commit>|g' upstream-to-debian.sh
     make sync
 
-Edit version numbers within Makefile, debian.sh and debian/changelog
+Also edit debian/changelog with the latest version at the top. The email address within the changelog must exactly correspond to your gpg key.
 
 Creating the package
 --------------------

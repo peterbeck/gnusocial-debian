@@ -1,6 +1,7 @@
 #!/bin/bash
 
-GNUSOCIAL_COMMIT='67801a556610f89a60106c0074c42947967f3adf'
+SOURCE_FILE='README.md'
+GNUSOCIAL_COMMIT=$(cat $SOURCE_FILE | grep 'Upstream commit:' | head -n 1 | awk -F ':' '{print $2}' | sed -e 's/^[ \t]*//')
 
 if [ $1 ]; then
     GNUSOCIAL_COMMIT=$1
