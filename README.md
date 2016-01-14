@@ -5,7 +5,9 @@ Current build
 -------------
 
 Version: 1.2.0
+
 Release: beta3
+
 Upstream commit: 67801a556610f89a60106c0074c42947967f3adf
 
 Updating
