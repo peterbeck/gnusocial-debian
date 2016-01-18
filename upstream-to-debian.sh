@@ -1,16 +1,17 @@
 #!/bin/bash
 
 SOURCE_FILE='README.md'
+GNUSOCIAL_REPO='https://git.gnu.io/gnu/gnu-social.git'
 GNUSOCIAL_COMMIT='67801a556610f89a60106c0074c42947967f3adf'
 UPSTREAM_DIR=~/.gnu-social
 CURR_DIR=$(pwd)
 
 if [ $1 ]; then
-    GNUSOCIAL_COMMIT='67801a556610f89a60106c0074c42947967f3adf'
+    GNUSOCIAL_COMMIT=$1
 fi
 
 if [ ! -d gnu-social ]; then
-    git clone https://git.gnu.io/gnu/gnu-social.git $UPSTREAM_DIR
+    git clone $GNUSOCIAL_REPO $UPSTREAM_DIR
 else
     cd $UPSTREAM_DIR
     git stash
