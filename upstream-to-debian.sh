@@ -7,7 +7,7 @@ UPSTREAM_DIR=~/.gnu-social
 CURR_DIR=$(pwd)
 
 if [ $1 ]; then
-    GNUSOCIAL_COMMIT=$1
+    GNUSOCIAL_COMMIT='67801a556610f89a60106c0074c42947967f3adf'
 fi
 
 if [ ! -d gnu-social ]; then

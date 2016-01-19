@@ -58,6 +58,9 @@ if [ ! -f ../${APP}_${VERSION}-${RELEASE}_all.deb ]; then
 	exit 1
 fi
 
+echo 'Running lintian checks...'
 lintian ../${APP}_${VERSION}-${RELEASE}_all.deb
+
+echo 'Build complete'
 
 exit 0
