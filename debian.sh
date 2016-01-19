@@ -21,6 +21,8 @@ if ! grep -q "$VERSION" debian/changelog; then
 	exit 1
 fi
 
+./upstream-to-debian.sh
+
 make clean
 make
 if [ ! "$?" = "0" ]; then
@@ -50,3 +52,12 @@ fi
 
 # restore the parent directory name
 mv ../${DIR} ../${APP}-debian
+
+if [ ! -f ../${APP}_${VERSION}-${RELEASE}_all.deb ]; then
+	echo "Failed to build ../${APP}_${VERSION}-${RELEASE}_all.deb"
+	exit 1
+fi
+
+lintian ../${APP}_${VERSION}-${RELEASE}_all.deb
+
+exit 0
