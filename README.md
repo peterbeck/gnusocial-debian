@@ -22,7 +22,7 @@ Creating the package
 
 Run the debian.sh script to generate the package.
 
-    sudo apt-get install build-essential lintian debconf
+    sudo apt-get install build-essential lintian python-software-properties debconf-utils software-properties-common
     git clone https://github.com/bashrc/gnusocial-debian
     cd gnusocial-debian
     ./debian.sh
@@ -32,9 +32,9 @@ Installation
 
 To ensure that the database gets created set the following before installing the package:
 
-    debconf-set-selections <<<'gnusocial/domain <domain name>'
-    debconf-set-selections <<<'gnusocial/admin_password string <my admin password>'
-    debconf-set-selections <<<'gnusocial/mysql_password string <mysql database password>'
+    debconf-set-selections <<<'gnusocial gnusocial/domain string <domain name>'
+    debconf-set-selections <<<'gnusocial gnusocial/admin_password string <my admin password>'
+    debconf-set-selections <<<'gnusocial gnusocial/mysql_password string <mysql database password>'
 
 If you want the system to also be accessible as a .onion service:
 
@@ -42,9 +42,9 @@ If you want the system to also be accessible as a .onion service:
 
 And if you want your site to be _only_ accessible as an onion service:
 
-    debconf-set-selections <<<'gnusocial/domain gnusocial.onion'
-    debconf-set-selections <<<'gnusocial/admin_password string <my admin password>'
-    debconf-set-selections <<<'gnusocial/mysql_password string <mysql database password>'
+    debconf-set-selections <<<'gnusocial gnusocial/domain string gnusocial.onion'
+    debconf-set-selections <<<'gnusocial gnusocial/admin_password string <my admin password>'
+    debconf-set-selections <<<'gnusocial gnusocial/mysql_password string <mysql database password>'
 
 Then to install:
 
