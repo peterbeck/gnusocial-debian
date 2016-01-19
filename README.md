@@ -13,11 +13,9 @@ Upstream commit: 67801a556610f89a60106c0074c42947967f3adf
 Updating
 --------
 
-If you need to update the package to a new version then edit the above version/commit then run:
+If you need to update the package to a new version then edit the above version/commit and debian/changelog then run:
 
-    make sync
-
-Also edit debian/changelog with the latest version at the top. The email address within the changelog must exactly correspond to your gpg key.
+    ./debian.sh
 
 Creating the package
 --------------------
@@ -28,10 +26,6 @@ Run the debian.sh script to generate the package.
     git clone https://github.com/bashrc/gnusocial-debian
     cd gnusocial-debian
     ./debian.sh
-
-The package can be tested with:
-
-    lintian ../gnusocial_*.deb
 
 Installation
 ------------
@@ -49,10 +43,12 @@ If you want the system to also be accessible as a .onion service:
 And if you want your site to be _only_ accessible as an onion service:
 
     debconf-set-selections <<<'gnusocial/domain gnusocial.onion'
+    debconf-set-selections <<<'gnusocial/admin_password string <my admin password>'
+    debconf-set-selections <<<'gnusocial/mysql_password string <mysql database password>'
 
 Then to install:
 
-    sudo apt-get install libjbig0 libterm-readkey-perl libtiff5 libaio1 mariadb-server php-gettext php-openid php5 php5-cli php5-curl php5-gd php-db php-mail php-mail-mimedecode php-http-request2 php5-fpm php-auth-sasl php-markdown php-net-ldap2 php-net-smtp php-net-socket php-net-url2 php-pear php-validate php5-gmp php5-intl php5-json php5-mysqlnd php5-stomp libmarkdown-php libjs-jquery-cookie libjs-jquery-form libjs-jquery-ui libjs-jquery fonts-font-awesome git curl php-xml-parser libcurl3 php-mail-mime libgd3 libjpeg62-turbo libvpx3 libxpm4
+    sudo apt-get install libjbig0 libterm-readkey-perl libtiff5 libaio1 mariadb-server php-gettext php-openid php5 php5-cli php5-curl php5-gd php-db php-mail php-mail-mimedecode php-http-request2 php5-fpm php-auth-sasl php-net-ldap2 php-net-smtp php-net-socket php-net-url2 php-pear php-validate php5-gmp php5-intl php5-json php5-mysql php5-stomp libmarkdown-php libjs-jquery-cookie libjs-jquery-form libjs-jquery-ui libjs-jquery fonts-font-awesome git curl php-xml-parser libcurl3 php-mail-mime libgd3 libjpeg62-turbo libxpm4
     sudo dpkg -i gnusocial_*.deb
 
 By default gnusocial will be installed to **/etc/share/gnusocial** and linked to **/var/www/gnusocial**.
