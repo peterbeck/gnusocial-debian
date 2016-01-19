@@ -5,15 +5,16 @@ set -e
 # Source debconf library.
 . /usr/share/debconf/confmodule
 
-GNUSOCIAL_DOMAIN_NAME='gnusocial.example'
-ONION_HOSTNAME=/var/lib/tor/hidden_service_gnusocial/hostname
-ADMIN_PASS='gnusocial'
+APP='gnusocial'
+GNUSOCIAL_DOMAIN_NAME="${APP}.example"
+ONION_HOSTNAME=/var/lib/tor/hidden_service_${APP}/hostname
+ADMIN_PASS="${APP}"
 GNUSOCIAL_PORT=8087
 
 # get the onion service port number
-db_input medium gnusocial/port || true
+db_input medium ${APP}/port || true
 db_go
-db_get gnusocial/port
+db_get ${APP}/port
 GNUSOCIAL_PORT_NUM=$RET
 if [ $GNUSOCIAL_PORT_NUM ]; then
     GNUSOCIAL_PORT=$GNUSOCIAL_PORT_NUM
@@ -21,11 +22,11 @@ fi
 
 if [ -d /etc/tor ]; then
     # create an onion service
-    if [ ! -d /var/lib/tor/hidden_service_gnusocial ]; then
-        echo 'HiddenServiceDir /var/lib/tor/hidden_service_gnusocial' >> /etc/tor/torrc
+    if [ ! -d /var/lib/tor/hidden_service_${APP} ]; then
+        echo "HiddenServiceDir /var/lib/tor/hidden_service_${APP}" >> /etc/tor/torrc
         echo "HiddenServicePort 80 127.0.0.1:$GNUSOCIAL_PORT" >> /etc/tor/torrc
-        service tor restart
-        sleep 5
+        #service tor restart
+        #sleep 5
     fi
 fi
 
@@ -36,9 +37,9 @@ if [ -f $ONION_HOSTNAME ]; then
 fi
 
 # get the domain name to be used
-db_input medium gnusocial/domain || true
+db_input medium ${APP}/domain || true
 db_go
-db_get gnusocial/domain
+db_get ${APP}/domain
 GNUSOCIAL_DOMAIN_NAME_STR=$RET
 if [ $GNUSOCIAL_DOMAIN_NAME_STR ]; then
     GNUSOCIAL_DOMAIN_NAME=$GNUSOCIAL_DOMAIN_NAME_STR
@@ -48,34 +49,34 @@ SCRDIR=$(mktemp -dt "$0")
 if [ ! "$?" = "0" ]; then
     exit 1
 fi
-SQL_FILE=$SCRDIR/gnusocial.sql
-INSTALLDIR=/etc/share/gnusocial
+SQL_FILE=$SCRDIR/${APP}.sql
+INSTALLDIR=/etc/share/${APP}
 
 # link into /var/www
-if [ ! -L /var/www/gnusocial ]; then
-    ln -s $INSTALLDIR /var/www/gnusocial
+if [ ! -L /var/www/${APP} ]; then
+    ln -s $INSTALLDIR /var/www/${APP}
 fi
 
 # configure nginx
 if [ -d /etc/nginx ]; then
     if [[ $GNUSOCIAL_DOMAIN_NAME != *".onion" ]]; then
-        install -m 644 $INSTALLDIR/webservers/nginx /etc/nginx/sites-available/gnusocial
+        install -m 644 $INSTALLDIR/webservers/nginx /etc/nginx/sites-available/${APP}
         if [ $GNUSOCIAL_ONION_DOMAIN_NAME ]; then
-            cat $INSTALLDIR/webservers/nginx $INSTALLDIR/webservers/nginx_onion > /etc/nginx/sites-available/gnusocial
-            sed -i "s|GNUSOCIAL_PORT|${GNUSOCIAL_PORT}|g" /etc/nginx/sites-available/gnusocial
+            cat $INSTALLDIR/webservers/nginx $INSTALLDIR/webservers/nginx_onion > /etc/nginx/sites-available/${APP}
+            sed -i "s|GNUSOCIAL_PORT|${GNUSOCIAL_PORT}|g" /etc/nginx/sites-available/${APP}
         fi
-        sed -i "s|gnusocial.example|${GNUSOCIAL_DOMAIN_NAME}|g" /etc/nginx/sites-available/gnusocial
+        sed -i "s|gnusocial.example|${GNUSOCIAL_DOMAIN_NAME}|g" /etc/nginx/sites-available/${APP}
         # Don't enable the site by default because the host files may need to be edited
-        #if [ ! -L /etc/nginx/sites-enabled/gnusocial ]; then
-        #   ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
+        #if [ ! -L /etc/nginx/sites-enabled/${APP} ]; then
+        #   ln -s /etc/nginx/sites-available/${APP} /etc/nginx/sites-enabled/
         #fi
     else
         # install as an onion service only
-        install -m 644 $INSTALLDIR/webservers/nginx_onion /etc/nginx/sites-available/gnusocial
-        sed -i "s|gnusocial.example|${GNUSOCIAL_ONION_DOMAIN_NAME}|g" /etc/nginx/sites-available/gnusocial
+        install -m 644 $INSTALLDIR/webservers/nginx_onion /etc/nginx/sites-available/${APP}
+        sed -i "s|${APP}.example|${GNUSOCIAL_ONION_DOMAIN_NAME}|g" /etc/nginx/sites-available/${APP}
         sed -i "s|GNUSOCIAL_PORT|${GNUSOCIAL_PORT}|g" /etc/nginx/sites-available/gnusocial
-        if [ ! -L /etc/nginx/sites-enabled/gnusocial ]; then
-            ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
+        if [ ! -L /etc/nginx/sites-enabled/${APP} ]; then
+            ln -s /etc/nginx/sites-available/${APP} /etc/nginx/sites-enabled/
         fi
     fi
 fi
@@ -83,31 +84,31 @@ fi
 # configure apache
 if [ -d /etc/apache2/sites-available ]; then
     if [[ $GNUSOCIAL_DOMAIN_NAME != *".onion" ]]; then
-        install -m 644 $INSTALLDIR/webservers/apache2 /etc/apache2/sites-available/gnusocial
+        install -m 644 $INSTALLDIR/webservers/apache2 /etc/apache2/sites-available/${APP}
         if [ $GNUSOCIAL_ONION_DOMAIN_NAME ]; then
-            cat $INSTALLDIR/webservers/apache2 $INSTALLDIR/webservers/apache2_onion > /etc/apache2/sites-available/gnusocial
-            sed -i "s|GNUSOCIAL_PORT|${GNUSOCIAL_PORT}|g" /etc/apache2/sites-available/gnusocial
+            cat $INSTALLDIR/webservers/apache2 $INSTALLDIR/webservers/apache2_onion > /etc/apache2/sites-available/${APP}
+            sed -i "s|GNUSOCIAL_PORT|${GNUSOCIAL_PORT}|g" /etc/apache2/sites-available/${APP}
         fi
-        sed -i "s|gnusocial.example|${GNUSOCIAL_DOMAIN_NAME}|g" /etc/apache2/sites-available/gnusocial
+        sed -i "s|${APP}.example|${GNUSOCIAL_DOMAIN_NAME}|g" /etc/apache2/sites-available/${APP}
         # Don't enable the site by default because the host files may need to be edited
-        #if [ ! -L /etc/nginx/sites-enabled/gnusocial ]; then
-        #    a2ensite gnusocial
+        #if [ ! -L /etc/nginx/sites-enabled/${APP} ]; then
+        #    a2ensite ${APP}
         #fi
     else
         # install as an onion service only
-        install -m 644 $INSTALLDIR/webservers/apache2-onion /etc/apache2/sites-available/gnusocial
-        sed -i "s|gnusocial.example|${GNUSOCIAL_ONION_DOMAIN_NAME}|g" /etc/apache2/sites-available/gnusocial
-        sed -i "s|GNUSOCIAL_PORT|${GNUSOCIAL_PORT}|g" /etc/apache2/sites-available/gnusocial
-        if [ ! -L /etc/apache2/sites-enabled/gnusocial ]; then
-            a2ensite gnusocial
+        install -m 644 $INSTALLDIR/webservers/apache2-onion /etc/apache2/sites-available/${APP}
+        sed -i "s|${APP}.example|${GNUSOCIAL_ONION_DOMAIN_NAME}|g" /etc/apache2/sites-available/${APP}
+        sed -i "s|GNUSOCIAL_PORT|${GNUSOCIAL_PORT}|g" /etc/apache2/sites-available/${APP}
+        if [ ! -L /etc/apache2/sites-enabled/${APP} ]; then
+            a2ensite ${APP}
         fi
     fi
 fi
 
 # get password for admin of the gnusocial database
-db_input medium gnusocial/admin_password || true
+db_input medium ${APP}/admin_password || true
 db_go
-db_get gnusocial/admin_password
+db_get ${APP}/admin_password
 GNUSOCIAL_ADMIN_PASSWORD=$RET
 if [ $GNUSOCIAL_ADMIN_PASSWORD ]; then
     ADMIN_PASS=$GNUSOCIAL_ADMIN_PASSWORD
@@ -115,9 +116,9 @@ fi
 
 # get root password for mysql/MariaDB
 MYSQL_ROOT_PASS=
-db_input medium gnusocial/mysql_password || true
+db_input medium ${APP}/mysql_password || true
 db_go
-db_get gnusocial/mysql_password
+db_get ${APP}/mysql_password
 MYSQL_ROOT_PASSWORD=$RET
 if [ $MYSQL_ROOT_PASSWORD ]; then
     MYSQL_ROOT_PASS=$MYSQL_ROOT_PASSWORD
@@ -125,17 +126,17 @@ fi
 
 # create the database
 if [ $MYSQL_ROOT_PASS ]; then
-    RESULT=$(mysqlshow --user=root --password="$MYSQL_ROOT_PASS" gnusocial| grep -v Wildcard | grep -o gnusocial)
-    if [ "$RESULT" != "gnusocial" ]; then
+    RESULT=$(mysqlshow --user=root --password="$MYSQL_ROOT_PASS" ${APP} | grep -v Wildcard | grep -o ${APP})
+    if [ "$RESULT" != "${APP}" ]; then
         # create a database
-        echo "create database gnusocial;
-CREATE USER 'gnusocialadmin'@'localhost' IDENTIFIED BY '$ADMIN_PASS';
-GRANT ALL PRIVILEGES ON gnusocial.* TO 'gnusocialadmin'@'localhost';
+        echo "create database ${APP};
+CREATE USER '${APP}admin'@'localhost' IDENTIFIED BY '$ADMIN_PASS';
+GRANT ALL PRIVILEGES ON ${APP}.* TO '${APP}admin'@'localhost';
 quit" > $SQL_FILE
         chmod 600 $SQL_FILE
         mysql -u root --password="$MYSQL_ROOT_PASS" < $SQL_FILE
         if [ ! "$?" = "0" ]; then
-            echo 'Unable to create database for gnusocial'
+            echo $"Unable to create database for ${APP}"
         fi
     fi
 fi
