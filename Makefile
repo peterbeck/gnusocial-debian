@@ -9,7 +9,7 @@ debug:
 sync:
 	./upstream-to-debian.sh
 source:
-	tar -cvf ../${APP}_${VERSION}.orig.tar ../${APP}-${VERSION} --exclude-vcs --exclude=gnu-social
+	tar -cvf ../${APP}_${VERSION}.orig.tar ../${APP}-${VERSION} --exclude-vcs
 	gzip -f9n ../${APP}_${VERSION}.orig.tar
 install:
 	mkdir -m 755 -p ${DESTDIR}${PREFIX}/share/${APP}
@@ -17,18 +17,18 @@ install:
 	cp -r webservers ${DESTDIR}${PREFIX}/share/${APP}
 uninstall:
 	rm -rf ${PREFIX}/share/${APP}
-	if [ -L /etc/nginx/sites-enabled/gnusocial ]; then \
-		rm -f /etc/nginx/sites-enabled/gnusocial; \
+	if [ -L /etc/nginx/sites-enabled/${APP} ]; then \
+		rm -f /etc/nginx/sites-enabled/${APP}; \
 	fi
-	if [ -f /etc/nginx/sites-available/gnusocial ]; then \
-		rm /etc/nginx/sites-available/gnusocial; \
+	if [ -f /etc/nginx/sites-available/${APP} ]; then \
+		rm /etc/nginx/sites-available/${APP}; \
 	fi
 	if [ -d /etc/apache2 ]; then \
-		a2dissite gnusocial; \
-		rm /etc/apache2/sites-available/gnusocial; \
+		a2dissite ${APP}; \
+		rm /etc/apache2/sites-available/${APP}; \
 	fi
-	if [ -d /var/www/gnusocial ]; then \
-		rm /var/www/gnusocial; \
+	if [ -d /var/www/${APP} ]; then \
+		rm /var/www/${APP}; \
 	fi
 clean:
 	rm -f \#* \.#* debian/*.substvars debian/*.log
