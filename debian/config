@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Exit on error
+set -e
+
+APP='gnusocial'
+
+# Source debconf library.
+. /usr/share/debconf/confmodule
+
+# Ask questions
+db_input medium ${APP}/domain || true
+db_input medium ${APP}/admin_password || true
+db_input medium ${APP}/mysql_password || true
+
+# Show interface
+db_go || true

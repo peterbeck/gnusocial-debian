@@ -1,0 +1,14 @@
+Template: gnusocial/domain
+Type: string
+Description: Domain name:
+ Enter the domain name for your GNU Social installation
+
+Template: gnusocial/admin_password
+Type: string
+Description: Admin Password:
+ Enter the admin password for the gnusocial database within MariaDB
+
+Template: gnusocial/mysql_password
+Type: string
+Description: MariaDB root password:
+ Enter the root password for MariaDB

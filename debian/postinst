@@ -37,15 +37,6 @@ ONION_HOSTNAME=/var/lib/tor/hidden_service_${APP}/hostname
 ADMIN_PASS="${APP}"
 GNUSOCIAL_PORT=8087
 
-# get the onion service port number
-db_input medium ${APP}/port || true
-db_go
-db_get ${APP}/port
-GNUSOCIAL_PORT_NUM=$RET
-if [ $GNUSOCIAL_PORT_NUM ]; then
-    GNUSOCIAL_PORT=$GNUSOCIAL_PORT_NUM
-fi
-
 if [ -d /etc/tor ]; then
     # create an onion service
     if [ ! -d /var/lib/tor/hidden_service_${APP} ]; then
@@ -63,8 +54,6 @@ if [ -f $ONION_HOSTNAME ]; then
 fi
 
 # get the domain name to be used
-db_input medium ${APP}/domain || true
-db_go
 db_get ${APP}/domain
 GNUSOCIAL_DOMAIN_NAME_STR=$RET
 if [ $GNUSOCIAL_DOMAIN_NAME_STR ]; then
@@ -132,8 +121,6 @@ if [ -d /etc/apache2/sites-available ]; then
 fi
 
 # get password for admin of the gnusocial database
-db_input medium ${APP}/admin_password || true
-db_go
 db_get ${APP}/admin_password
 GNUSOCIAL_ADMIN_PASSWORD=$RET
 if [ $GNUSOCIAL_ADMIN_PASSWORD ]; then
@@ -142,8 +129,6 @@ fi
 
 # get root password for mysql/MariaDB
 MYSQL_ROOT_PASS=
-db_input medium ${APP}/mysql_password || true
-db_go
 db_get ${APP}/mysql_password
 MYSQL_ROOT_PASSWORD=$RET
 if [ $MYSQL_ROOT_PASSWORD ]; then
