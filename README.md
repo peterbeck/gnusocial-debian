@@ -55,3 +55,27 @@ If this is the first time that you have installed MariaDB then set the root pass
 By default gnusocial will be installed to **/etc/share/gnusocial** and linked to **/var/www/gnusocial**.
 
 Web host examples will be created within **/etc/apache2/sites-available** or **/etc/nginx/sites-available**, but they're not enabled. You can use that as a guide to how to integrate gnusocial with your system.
+
+To obtain a Let's Encrypt certificate for your domain name:
+
+    sudo su
+    cd ~/
+    git clone https://github.com/letsencrypt/letsencrypt
+    systemctl stop nginx/apache2
+	cd ~/letsencrypt
+    ./letsencrypt-auto certonly --server https://acme-v01.api.letsencrypt.org/directory --standalone -d <domain name> --renew-by-default --agree-tos --email <your email address>
+    systemctl start nginx/apache2
+    exit
+
+Enable Your site:
+
+    sudo ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
+    sudo systemctl restart nginx
+    sudo systemctl restart php5-fpm
+
+or for Apache:
+
+    sudo a2ensite gnusocial
+    sudo systemctl restart apache2
+
+Then in a browser navigate to your domain name.
