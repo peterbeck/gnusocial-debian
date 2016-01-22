@@ -16,7 +16,7 @@ if [ $GNUSOCIAL_DOMAIN_NAME_STR ]; then
     GNUSOCIAL_DOMAIN_NAME=$GNUSOCIAL_DOMAIN_NAME_STR
 fi
 
-SCRDIR=$(mktemp -dt "$0.XXXXXXXX")
+SCRDIR=$(mktemp -dt "$(basename $0).XXXXXXXX")
 if [ ! "$?" = "0" ]; then
     exit 1
 fi
