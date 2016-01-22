@@ -13,7 +13,7 @@ export DH_ALWAYS_EXCLUDE=.git
 # Update version numbers automatically - so you don't have to
 sed -i "s/VERSION=.*/VERSION='${VERSION}'/g" Makefile
 sed -i "s/RELEASE=.*/RELEASE='${RELEASE}'/g" Makefile
-sed -i "s/GNUSOCIAL_COMMIT=.*/GNUSOCIAL_COMMIT='${GNUSOCIAL_COMMIT}'/g" upstream-to-debian.sh
+sed -i "0,/RE/s/GNUSOCIAL_COMMIT=.*/GNUSOCIAL_COMMIT='${GNUSOCIAL_COMMIT}'/" upstream-to-debian.sh
 sed -i "s/-'${PREV_VERSION}'.so/-'${VERSION}'.so/g" debian/*.links
 
 if ! grep -q "$VERSION" debian/changelog; then
