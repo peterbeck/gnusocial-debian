@@ -32,9 +32,13 @@ Installation
 
 To ensure that the database gets created set the following before installing the package:
 
-    debconf-set-selections <<<'gnusocial gnusocial/domain string <domain name>'
-    debconf-set-selections <<<'gnusocial gnusocial/admin_password string <my admin password>'
-    debconf-set-selections <<<'gnusocial gnusocial/mysql_password string <mariaDB root user password>'
+    GNUSOCIAL_DOMAIN_NAME='your domain name'
+    GNUSOCIAL_ADMIN_PASSWORD='your admin user password for the gnusocial database'
+    MARIADB_ROOT_PASSWORD='Your password goes here'
+    sudo debconf-set-selections <<< "mariadb-server mariadb-server/root_password password $MARIADB_ROOT_PASSWORD"
+    sudo debconf-set-selections <<< "mariadb-server mariadb-server/root_password_again password $MARIADB_ROOT_PASSWORD"
+    sudo debconf-set-selections <<< "gnusocial gnusocial/domain string $GNUSOCIAL_DOMAIN_NAME"
+    sudo debconf-set-selections <<< "gnusocial gnusocial/admin_password password $GNUSOCIAL_ADMIN_PASSWORD"
 
 Install your preferred web server:
 
@@ -47,9 +51,6 @@ or
 Then to install:
 
     sudo apt-get install eatmydata libjbig0 libterm-readkey-perl libtiff5 libaio1 mariadb-server-10.0 php-gettext php-openid php5 php5-cli php5-curl php5-gd php-db php-mail php-mail-mimedecode php-http-request2 php5-fpm php-auth-sasl php-net-ldap2 php-net-smtp php-net-socket php-net-url2 php-pear php-validate php5-gmp php5-intl php5-json php5-mysql php5-stomp libmarkdown-php libjs-jquery-cookie libjs-jquery-form libjs-jquery-ui libjs-jquery fonts-font-awesome git curl php-xml-parser libcurl3 php-mail-mime libgd3 libjpeg62-turbo libxpm4
-
-If this is the first time that you have installed MariaDB then set the root password to be the same as you gave for *gnusocial/mysql_password* above. Then you can install gnusocial:
-
     sudo eatmydata dpkg -i ../gnusocial_*.deb
 
 By default gnusocial will be installed to **/etc/share/gnusocial** and linked to **/var/www/gnusocial**.

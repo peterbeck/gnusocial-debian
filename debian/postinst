@@ -57,7 +57,7 @@ fi
 
 # get root password for mysql/MariaDB
 MYSQL_ROOT_PASS=
-db_get ${APP}/mysql_password
+db_get mariadb-server/root_password
 MYSQL_ROOT_PASSWORD=$RET
 if [ $MYSQL_ROOT_PASSWORD ]; then
     MYSQL_ROOT_PASS=$MYSQL_ROOT_PASSWORD
