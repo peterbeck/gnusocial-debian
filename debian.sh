@@ -17,8 +17,8 @@ sed -i "0,/RE/s/GNUSOCIAL_COMMIT=.*/GNUSOCIAL_COMMIT='${GNUSOCIAL_COMMIT}'/" ups
 sed -i "s/-'${PREV_VERSION}'.so/-'${VERSION}'.so/g" debian/*.links
 
 if ! grep -q "$VERSION" debian/changelog; then
-	echo "Edit debian/changelog and add version $VERSION-$RELEASE at the top"
-	exit 1
+    echo "Edit debian/changelog and add version $VERSION-$RELEASE at the top"
+    exit 1
 fi
 
 ./upstream-to-debian.sh
@@ -26,7 +26,7 @@ fi
 make clean
 make
 if [ ! "$?" = "0" ]; then
-	exit 1
+    exit 1
 fi
 
 # change the parent directory name to debian format
@@ -36,14 +36,14 @@ mv ../${APP}-debian ../${DIR}
 make source
 if [ ! "$?" = "0" ]; then
     mv ../${DIR} ../${APP}-debian
-	exit 2
+    exit 2
 fi
 
 # Build the package
 dpkg-buildpackage -i -F
 if [ ! "$?" = "0" ]; then
     mv ../${DIR} ../${APP}-debian
-	exit 3
+    exit 3
 fi
 
 # sign files
@@ -54,8 +54,8 @@ fi
 mv ../${DIR} ../${APP}-debian
 
 if [ ! -f ../${APP}_${VERSION}-${RELEASE}_all.deb ]; then
-	echo "Failed to build ../${APP}_${VERSION}-${RELEASE}_all.deb"
-	exit 1
+    echo "Failed to build ../${APP}_${VERSION}-${RELEASE}_all.deb"
+    exit 1
 fi
 
 echo 'Running lintian checks...'

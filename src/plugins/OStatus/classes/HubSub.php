@@ -226,8 +226,12 @@ class HubSub extends Managed_DataObject
      * @param string $atom well-formed Atom feed
      * @param array $pushCallbacks list of callback URLs
      */
-    function bulkDistribute($atom, $pushCallbacks)
+    function bulkDistribute($atom, array $pushCallbacks)
     {
+        if (empty($pushCallbacks)) {
+            common_log(LOG_ERR, 'Callback list empty for bulkDistribute.');
+            return false;
+        }
         $data = array('atom' => $atom,
                       'topic' => $this->topic,
                       'pushCallbacks' => $pushCallbacks);
@@ -235,6 +239,7 @@ class HubSub extends Managed_DataObject
                              count($pushCallbacks) . " sites");
         $qm = QueueManager::get();
         $qm->enqueue($data, 'hubprep');
+        return true;
     }
 
     /**

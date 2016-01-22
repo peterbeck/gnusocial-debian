@@ -18,7 +18,7 @@ class OpportunisticQueueManager extends DBQueueManager
 {
     protected $qmkey = false;
     protected $max_execution_time = null;
-    protected $max_execution_margin = null; // margin to execution time, including timeouts etc.
+    protected $max_execution_margin = null; // margin to PHP's max_execution_time
     protected $max_queue_items = null;
 
     protected $started_at = null;
@@ -43,7 +43,7 @@ class OpportunisticQueueManager extends DBQueueManager
         }
 
         if ($this->max_execution_margin === null) {
-            $this->max_execution_margin = 10;    // should be calculated from our default timeouts for http requests etc.
+            $this->max_execution_margin = common_config('http', 'connect_timeout') + 1;   // think PHP's max exec time, minus this value to have time for timeouts etc.
         }
 
         return parent::__construct();
@@ -65,7 +65,7 @@ class OpportunisticQueueManager extends DBQueueManager
             return false;
         }
         // If too much time has passed, stop
-        if ($time_passed >= $this->max_execution_time - $this->max_execution_margin) {
+        if ($time_passed >= $this->max_execution_time || $time_passed > ini_get('max_execution_time') - $this->max_execution_margin) {
             return false;
         }
         // If we have a max-item-limit, check if it has been passed
