@@ -111,9 +111,11 @@ Then if you're using nginx append this to the end of to your */etc/nginx/sites-a
         error_log off;
     }
 
+
 To enable Your site:
 
     sudo ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
+    sudo rm /etc/nginx/sites-enabled/default
     sudo systemctl restart nginx
     sudo systemctl restart php5-fpm
 
@@ -123,3 +125,19 @@ or for Apache:
     sudo systemctl restart apache2
 
 Then in a browser navigate to your domain name or your onion address in a Tor compatible browser.
+
+To set up your GNU Social site:
+
+ * Set a name for the site
+ * Server SSL: enable
+ * Hostname: localhost
+ * Type: MySql/MariaDB
+ * Name: gnusocial
+ * DB username: root
+ * DB Password; <MariaDB root password>
+ * Administrator nickname: <your username>
+ * Administrator password: <your admin user password for the gnusocial database>
+ * Subscribe to announcements: ticked
+ * Site profile: Community
+
+When the install is complete you will see a lot of warnings but just ignore those and navigate to your domain name (or onion address) and you can then complete the configuration via the *Admin* section on the header bar.
