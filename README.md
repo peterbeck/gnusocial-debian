@@ -126,4 +126,4 @@ or for Apache:
     sudo a2ensite gnusocial
     sudo systemctl restart apache2
 
-Then in a browser navigate to your domain name or your onion address in a Tor browser.
+Then in a browser navigate to your domain name or your onion address in a Tor compatible browser.
