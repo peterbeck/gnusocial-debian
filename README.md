@@ -134,9 +134,9 @@ To set up your GNU Social site:
  * Type: MySql/MariaDB
  * Name: gnusocial
  * DB username: root
- * DB Password; <MariaDB root password>
- * Administrator nickname: <your username>
- * Administrator password: <your admin user password for the gnusocial database>
+ * DB Password; *[MariaDB root password]*
+ * Administrator nickname: *[your username]*
+ * Administrator password: *[your admin user password for the gnusocial database]*
  * Subscribe to announcements: ticked
  * Site profile: Community
 
