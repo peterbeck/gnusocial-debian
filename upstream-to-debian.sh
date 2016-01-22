@@ -10,7 +10,7 @@ if [ $1 ]; then
     GNUSOCIAL_COMMIT=$1
 fi
 
-if [ ! -d gnu-social ]; then
+if [ ! -d $UPSTREAM_DIR ]; then
     git clone $GNUSOCIAL_REPO $UPSTREAM_DIR
 else
     cd $UPSTREAM_DIR
