@@ -54,7 +54,6 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
          libgd3,
          libjpeg62-turbo,
          libxpm4
-Suggests: tor
 Description: GNU social is a free social networking platform
  It helps people in a community, company or group to exchange short
  status updates, do polls, announce events, or other social

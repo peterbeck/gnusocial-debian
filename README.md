@@ -34,16 +34,6 @@ To ensure that the database gets created set the following before installing the
 
     debconf-set-selections <<<'gnusocial gnusocial/domain string <domain name>'
     debconf-set-selections <<<'gnusocial gnusocial/admin_password string <my admin password>'
-    debconf-set-selections <<<'gnusocial gnusocial/mysql_password string <mysql database password>'
-
-If you want the system to also be accessible as a .onion service:
-
-    sudo apt-get install tor
-
-And if you want your site to be _only_ accessible as an onion service:
-
-    debconf-set-selections <<<'gnusocial gnusocial/domain string gnusocial.onion'
-    debconf-set-selections <<<'gnusocial gnusocial/admin_password string <my admin password>'
     debconf-set-selections <<<'gnusocial gnusocial/mysql_password string <mariaDB root user password>'
 
 Install your preferred web server:
