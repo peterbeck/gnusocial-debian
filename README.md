@@ -67,7 +67,55 @@ To obtain a Let's Encrypt certificate for your domain name:
     systemctl start nginx/apache2
     exit
 
-Enable Your site:
+If you also want an onion address:
+
+    sudo su
+    apt-get install tor
+    echo "HiddenServiceDir /var/lib/tor/hidden_service_gnusocial" >> /etc/tor/torrc
+    echo "HiddenServicePort 80 127.0.0.1:8087" >> /etc/tor/torrc
+    systemctl restart tor
+    exit
+
+To show what your onion address is:
+
+    sudo cat /var/lib/tor/hidden_service_gnusocial/hostname
+
+Then if you're using nginx append this to the end of to your */etc/nginx/sites-available/gnusocial* file:
+
+    server {
+        listen 127.0.0.1:8087 default_server
+        server_name gnusocial.onion;
+        root /var/www/gnusocial;
+        index index.php index.html index.htm;
+        access_log off;
+        limit_conn conn_limit_per_ip 10;
+        limit_req zone=req_limit_per_ip burst=10 nodelay;
+        location ~* \.php$ {
+            try_files $uri $uri/ /index.php;
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            fastcgi_pass unix:/var/run/php5-fpm.sock;
+            include fastcgi_params;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            fastcgi_read_timeout 300;
+        }
+        add_header X-Frame-Options DENY;
+        add_header X-Content-Type-Options nosniff;
+        location / {
+            rewrite ^(.*)$ /index.php?p=$1 last;
+            break;
+        }
+        location ~* ^/(.*)\.(ico|css|js|gif|png|jpg|bmp|JPG|jpeg)$ {
+            root /var/www/gnusocial;
+            rewrite ^/(.*)$ /$1 break;
+            access_log off;
+            expires max;
+        }
+        client_max_body_size      15m;
+        error_log off;
+    }
+
+To enable Your site:
 
     sudo ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
     sudo systemctl restart nginx
@@ -78,4 +126,4 @@ or for Apache:
     sudo a2ensite gnusocial
     sudo systemctl restart apache2
 
-Then in a browser navigate to your domain name.
+Then in a browser navigate to your domain name or your onion address in a Tor browser.
