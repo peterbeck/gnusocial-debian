@@ -75,22 +75,17 @@ If you also want an onion address:
     echo 'HiddenServiceDir /var/lib/tor/hidden_service_gnusocial' >> /etc/tor/torrc
     echo 'HiddenServicePort 80 127.0.0.1:8087' >> /etc/tor/torrc
     systemctl restart tor
+    echo "GNU Social onion address: $(cat /var/lib/tor/hidden_service_gnusocial/hostname)"
     exit
-
-To show what your onion address is:
-
-    sudo cat /var/lib/tor/hidden_service_gnusocial/hostname
 
 Then if you're using nginx append this to the end of to your */etc/nginx/sites-available/gnusocial* file:
 
     server {
-        listen 127.0.0.1:8087 default_server
+        listen 127.0.0.1:8087 default_server;
         server_name gnusocial.onion;
         root /var/www/gnusocial;
         index index.php index.html index.htm;
         access_log off;
-        limit_conn conn_limit_per_ip 10;
-        limit_req zone=req_limit_per_ip burst=10 nodelay;
         location ~* \.php$ {
             try_files $uri $uri/ /index.php;
             fastcgi_split_path_info ^(.+\.php)(/.+)$;

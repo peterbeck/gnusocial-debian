@@ -7,8 +7,6 @@ server {
     access_log off;
     error_log off;
     index index.php;
-    limit_conn conn_limit_per_ip 10;
-    limit_req zone=req_limit_per_ip burst=10 nodelay;
 
     rewrite ^ https://$server_name$request_uri? permanent;
 }
@@ -21,9 +19,6 @@ server {
     root /var/www/gnusocial;
     index index.php index.html index.htm;
     access_log off;
-
-    limit_conn conn_limit_per_ip 10;
-    limit_req zone=req_limit_per_ip burst=10 nodelay;
 
     location ~* \.php$ {
         # Zero-day exploit defense.
@@ -38,9 +33,9 @@ server {
     }
 
     # It is expected that Let's Encrypt will be used
-    ssl on;
-    ssl_certificate /etc/letsencrypt/live/$server_name/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/$server_name/privkey.pem;
+    #ssl on;
+    #ssl_certificate /etc/letsencrypt/live/$server_name/fullchain.pem;
+    #ssl_certificate_key /etc/letsencrypt/live/$server_name/privkey.pem;
 
     ssl_session_timeout 60m;
     ssl_prefer_server_ciphers on;
