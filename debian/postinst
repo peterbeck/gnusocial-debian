@@ -65,19 +65,17 @@ fi
 
 # create the database
 if [ $MYSQL_ROOT_PASS ]; then
-    RESULT=$(mysqlshow --user=root --password="$MYSQL_ROOT_PASS" ${APP} | grep -v Wildcard | grep -o ${APP})
-    if [ "$RESULT" != "${APP}" ]; then
-        # create a database
-        echo "create database ${APP};
+    # create a database
+    echo "create database ${APP};
 CREATE USER '${APP}admin'@'localhost' IDENTIFIED BY '$ADMIN_PASS';
 GRANT ALL PRIVILEGES ON ${APP}.* TO '${APP}admin'@'localhost';
 quit" > $SQL_FILE
-        chmod 600 $SQL_FILE
-        mysql -u root --password="$MYSQL_ROOT_PASS" < $SQL_FILE
-        if [ ! "$?" = "0" ]; then
-            echo $"Unable to create database for ${APP}"
-        fi
+    chmod 600 $SQL_FILE
+    mysql -u root --password="$MYSQL_ROOT_PASS" < $SQL_FILE
+    if [ ! "$?" = "0" ]; then
+        echo $"Unable to create database for ${APP}"
     fi
+	rm $SQL_FILE
 fi
 rm -rf $SCRDIR
 
