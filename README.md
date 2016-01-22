@@ -72,8 +72,8 @@ If you also want an onion address:
 
     sudo su
     apt-get install tor
-    echo "HiddenServiceDir /var/lib/tor/hidden_service_gnusocial" >> /etc/tor/torrc
-    echo "HiddenServicePort 80 127.0.0.1:8087" >> /etc/tor/torrc
+    echo 'HiddenServiceDir /var/lib/tor/hidden_service_gnusocial' >> /etc/tor/torrc
+    echo 'HiddenServicePort 80 127.0.0.1:8087' >> /etc/tor/torrc
     systemctl restart tor
     exit
 
