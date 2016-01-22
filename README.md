@@ -111,8 +111,7 @@ Then if you're using nginx append this to the end of to your */etc/nginx/sites-a
         error_log off;
     }
 
-
-To enable Your site:
+To enable your site:
 
     sudo ln -s /etc/nginx/sites-available/gnusocial /etc/nginx/sites-enabled/
     sudo rm /etc/nginx/sites-enabled/default
