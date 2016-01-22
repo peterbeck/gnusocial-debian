@@ -3,7 +3,7 @@
 SOURCE_FILE='README.md'
 GNUSOCIAL_REPO='https://git.gnu.io/gnu/gnu-social.git'
 GNUSOCIAL_COMMIT='67801a556610f89a60106c0074c42947967f3adf'
-UPSTREAM_DIR=~/.gnu-social
+UPSTREAM_DIR=~/.gnu-social-package
 CURR_DIR=$(pwd)
 
 if [ $1 ]; then
