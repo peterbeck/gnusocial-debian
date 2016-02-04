@@ -5,9 +5,9 @@
 <VirtualHost gnusocial.example:443>
     ServerName gnusocial.example
 
-    DocumentRoot /var/www/gnusocial
+    DocumentRoot /etc/share/gnusocial
     DirectoryIndex index.php
-    <Directory /var/www/gnusocial>
+    <Directory /etc/share/gnusocial>
         AllowOverride All
         Order Deny,Allow
         Allow from all
