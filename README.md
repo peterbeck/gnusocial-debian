@@ -81,36 +81,45 @@ If you also want an onion address:
 
 Then if you're using nginx append this to the end of to your */etc/nginx/sites-available/gnusocial* file:
 
-    server {
-        listen 127.0.0.1:8087 default_server;
-        server_name gnusocial.onion;
-        root /var/www/gnusocial;
-        index index.php index.html index.htm;
-        access_log off;
-        location ~* \.php$ {
-            try_files $uri $uri/ /index.php;
-            fastcgi_split_path_info ^(.+\.php)(/.+)$;
-            fastcgi_pass unix:/var/run/php5-fpm.sock;
-            include fastcgi_params;
-            fastcgi_index index.php;
-            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-            fastcgi_read_timeout 300;
-        }
-        add_header X-Frame-Options DENY;
-        add_header X-Content-Type-Options nosniff;
-        location / {
-            rewrite ^(.*)$ /index.php?p=$1 last;
-            break;
-        }
-        location ~* ^/(.*)\.(ico|css|js|gif|png|jpg|bmp|JPG|jpeg)$ {
-            root /var/www/gnusocial;
-            rewrite ^/(.*)$ /$1 break;
-            access_log off;
-            expires max;
-        }
-        client_max_body_size      15m;
-        error_log off;
-    }
+``` bash
+server {
+  listen 127.0.0.1:8087 default_server;
+  server_name gnusocial.example;
+
+  # Logs
+  access_log off;
+  error_log off;
+
+  # Root
+  root /etc/share/gnusocial;
+
+  # Index
+  index index.php;
+
+  # PHP
+  location ~ \.php {
+    include snippets/fastcgi-php.conf;
+    fastcgi_pass unix:/var/run/php5-fpm.sock;
+  }
+
+  # Location
+  location / {
+    try_files $uri $uri/ @gnusocial;
+  }
+
+  # Fancy URLs
+  location @gnusocial {
+    rewrite ^(.*)$ /index.php?p=$1 last;
+  }
+
+  # Restrict access that is unnecessary anyway
+  location ~ /\.(ht|git) {
+    deny all;
+  }
+
+  client_max_body_size 15m;
+}
+```
 
 To enable your site:
 
