@@ -2,7 +2,7 @@
 
 SOURCE_FILE='README.md'
 GNUSOCIAL_REPO='https://git.gnu.io/gnu/gnu-social.git'
-GNUSOCIAL_COMMIT='67801a556610f89a60106c0074c42947967f3adf'
+GNUSOCIAL_COMMIT='771f08b3c761ff122c3fff7bdb13ec6625828018'
 UPSTREAM_DIR=~/.gnu-social-package
 CURR_DIR=$(pwd)
 
