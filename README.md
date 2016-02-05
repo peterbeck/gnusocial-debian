@@ -1,6 +1,8 @@
 GNU Social package for Debian
 =============================
 
+Also see the package for the Qvitter plugin at https://github.com/bashrc/gnusocial-qvitter-debian
+
 Current build
 -------------
 
