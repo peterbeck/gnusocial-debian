@@ -31,6 +31,6 @@ uninstall:
 		rm /var/www/${APP}; \
 	fi
 clean:
-	rm -f \#* \.#* debian/*.substvars debian/*.log
+	rm -f \#* \.#* debian/*.substvars debian/*.log debian/gnusocial*
 	rm -rf deb.* debian/${APP}
 	rm -f ../${APP}*.deb ../${APP}*.changes ../${APP}*.asc ../${APP}*.dsc
