@@ -28,7 +28,7 @@ cd $CURR_DIR
 cp -r $UPSTREAM_DIR/* src/
 
 # remove additional copyright files
-cp src/COPYING COPYING
+cp src/COPYING LICENSE
 rm src/COPYING
 rm src/extlib/Michelf/License.md
 rm src/extlib/gpl-2.0.txt
