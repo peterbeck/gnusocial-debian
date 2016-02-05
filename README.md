@@ -8,7 +8,7 @@ Version: 1.2.0
 
 Release: beta3
 
-Upstream commit: 67801a556610f89a60106c0074c42947967f3adf
+Upstream commit: 771f08b3c761ff122c3fff7bdb13ec6625828018
 
 Updating
 --------
