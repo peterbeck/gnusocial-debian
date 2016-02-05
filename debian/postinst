@@ -75,9 +75,24 @@ quit" > $SQL_FILE
     if [ ! "$?" = "0" ]; then
         echo $"Unable to create database for ${APP}"
     fi
-	rm $SQL_FILE
+    rm $SQL_FILE
 fi
 rm -rf $SCRDIR
+
+CONFIG_FILE=$INSTALLDIR/config.php
+if [ ! -f $CONFIG_FILE ]; then
+    echo $'No config.php file found'
+    exit 2
+fi
+echo '' >> $CONFIG_FILE
+echo "// Recommended GNU social settings" >> $CONFIG_FILE
+echo "\$config['thumbnail']['maxsize'] = 3000;" >> $CONFIG_FILE
+echo "\$config['profile']['delete'] = true;" >> $CONFIG_FILE
+echo "\$config['profile']['changenick'] = true;" >> $CONFIG_FILE
+echo "\$config['public']['localonly'] = false;" >> $CONFIG_FILE
+echo "addPlugin('StoreRemoteMedia');" >> $CONFIG_FILE
+echo "\$config['queue']['enabled'] = true;" >> $CONFIG_FILE
+echo "\$config['queue']['daemon'] = true;" >> $CONFIG_FILE
 
 # set permissions
 chmod a+w $INSTALLDIR
